@@ -1,2 +1,2 @@
 # proyectoApprende
-Este es un repositorio donde se van a ir almacenando los avamces del proyecto.
+Este es un repositorio donde se van a ir almacenando los avances del proyecto.
