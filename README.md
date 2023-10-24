@@ -11,5 +11,5 @@ uvicorn API.main:app --reload
 ejecutar web
 python -m http.server 8080 --directory web        
 
-endpoints de la API:
+Endpoints de la API:
 http://localhost:8000/profesores/{tema}
