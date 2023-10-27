@@ -4,4 +4,4 @@ env/
 entornoVirtual/
 
 #archivos secundarios de visual paradigm
-*.bak_000f
+**/*.bak_000f
