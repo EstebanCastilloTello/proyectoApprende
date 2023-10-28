@@ -8,11 +8,49 @@ from selenium.webdriver.support import expected_conditions as EC
 from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+#openai
+import openai
+#dotenv
+import os
+from dotenv import load_dotenv
+
+#cargar dotenv y apikey
+load_dotenv()
+api_key = os.getenv("API_KEY_OPENAI")
+# Establecer la clave de la API de OpenAI
+openai.api_key = api_key
+
+
 
 # Configuración de Selenium Chrome
 options = webdriver.ChromeOptions()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+#opcion para establecer en segundo plano chrome
+options.add_argument('--headless')
+
 driver = webdriver.Chrome(options=options)
+
+
+#funcion para encontrar palabra clave en descripcion usando openai
+def encontrar_palabra_clave_descripcion(descripcion):
+    prompt = "reconoce como palabra clave el tema principal del taller de la siguiente descripción:" + descripcion
+
+    response = openai.Completion.create(
+        model='text-davinci-003',
+        prompt=prompt,
+        temperature=0,
+        max_tokens=20,
+        top_p=1,
+        frequency_penalty=0.5,
+        presence_penalty=0
+    )
+
+    #para ver la palabra clave:
+    print(response.choices[0].text)
+    
+    return response.choices[0].text
+
 
 
 ##funcion de los profes
@@ -72,7 +110,7 @@ app.add_middleware(
 # endpoit raiz
 @app.get("/")
 def get_root():
-    return {"message": "¡Bienvenido a la API de prueba de FastAPI!", "port": app.port}
+    return {"message": "¡Bienvenido a la API de prueba de FastAPI!"}
 
 if __name__ == "__main__":
     # Cambia el puerto y el host según tus preferencias.
@@ -85,11 +123,23 @@ def multiplicar_numero(numero: int):
     return {"resultado": resultado}
 
 
-@app.get("/profesores/{temaMateria}")
-def get_profesores(temaMateria: str):
-    # Aquí puedes usar 'temaMateria' directamente para buscar profesores
-    resultado = buscar_profesores(temaMateria)
+@app.get("/profesores/{descripcion_taller}")
+def get_profesores(descripcion_taller: str):
+    
+    #llamar a la funcion de encontrar palabra clave usando openai
+    temaTaller = encontrar_palabra_clave_descripcion(descripcion_taller) 
+   
+    #llamar a la funcion de buscar profesores en superprof
+    resultado = buscar_profesores(temaTaller)
+    
+
+    #para test, no usa openai, solo llama a superprof
+    #resultado = buscar_profesores(descripcion_taller)
+    
+    resultado.append({"tema_taller": temaTaller})
+        
     return {"profesores": resultado}
+
 
 #-----------------------------------------------------
 

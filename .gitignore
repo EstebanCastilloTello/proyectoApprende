@@ -2,3 +2,6 @@
 venv/
 env/
 entornoVirtual/
+
+#archivos secundarios de visual paradigm
+**/*.bak_000f
