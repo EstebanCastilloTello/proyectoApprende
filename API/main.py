@@ -95,7 +95,7 @@ def buscar_profesores(temaMateria):
 app = FastAPI()
 
 # Configurar los orígenes permitidos (puede ajustarlos según sus necesidades)
-origins = ["http://localhost", "http://localhost:3000", "http://localhost:8080"]
+origins = ["http://localhost", "http://localhost:3000", "http://localhost:8080", "http://127.0.0.1:8080", "http://127.0.0.1"]
 
 # Habilitar el middleware CORS
 app.add_middleware(
