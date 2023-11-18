@@ -3,5 +3,8 @@ venv/
 env/
 entornoVirtual/
 
+# Ignorar variables de entorno
+.env
+
 #archivos secundarios de visual paradigm
 **/*.bak_000f
