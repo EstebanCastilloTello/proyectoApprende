@@ -26,3 +26,7 @@ python -m http.server 8080 --directory web
 
 Endpoints de la API:
 http://localhost:8000/profesores/{tema}
+
+
+### Documentación de los endpoints
+https://documenter.getpostman.com/view/27256435/2s9Ye8fEU8
