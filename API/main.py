@@ -13,6 +13,9 @@ import openai
 #dotenv
 import os
 from dotenv import load_dotenv
+import datetime
+import openpyxl
+from openpyxl import Workbook, load_workbook
 
 #cargar dotenv y apikey
 load_dotenv()
@@ -306,6 +309,26 @@ def get_insumos(descripcion_taller: str):
             
             
 
+#-----------------------------------------------------
+#Funcion para añadir datos a la base de datos
+
+def guardar_taller(tallerista, tema, link):
+    #fecha actual
+    hoy = datetime.datetime.now()
+    fecha_hoy = hoy.strftime("%y-%m-%d")
+
+    #abrir el archivo .xlsx
+    libro = load_workbook('DB.xlsx')
+    hoja = libro.active
+
+    #Contador para manejar las id
+    row_counter = hoja['A1'].value
+    hoja['A1'] = row_counter + 1
+    hoja.append([row_counter+1, 'nombre_tallerista', 'tipo_taller', link, fecha_hoy])
+    print(hoja['A1'].value)
+
+    #Guardamos los cambios realizados
+    libro.save('DB.xlsx')
 #-----------------------------------------------------
 
 
