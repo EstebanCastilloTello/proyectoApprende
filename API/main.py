@@ -230,7 +230,7 @@ def get_profesores(descripcion_taller: str):
 
 #endpoint para encontrar insumos en lider
 @app.get("/insumosLider/{descripcion_taller}")
-def get_insumos(descripcion_taller: str):
+def get_insumos_lider(descripcion_taller: str):
     
     #llamar a la funcion de encontrar insumos usando openai
     productosIdentificados = encontrar_insumos_descripcion(descripcion_taller)
@@ -273,7 +273,7 @@ def get_insumos(descripcion_taller: str):
 
 #endpoint para encontrar insumos en mercado libre
 @app.get("/insumosMercadoLibre/{descripcion_taller}")
-def get_insumos(descripcion_taller: str):
+def get_insumos_mercadolibre(descripcion_taller: str):
             
     #llamar a la funcion de encontrar insumos usando openai
     productosIdentificados = encontrar_insumos_descripcion(descripcion_taller)
@@ -324,7 +324,7 @@ def guardar_taller(tallerista, tema, link):
     #Contador para manejar las id
     row_counter = hoja['A1'].value
     hoja['A1'] = row_counter + 1
-    hoja.append([row_counter+1, 'nombre_tallerista', 'tipo_taller', link, fecha_hoy])
+    hoja.append([row_counter+1, tallerista, tema, link, fecha_hoy])
     print(hoja['A1'].value)
 
     #Guardamos los cambios realizados
