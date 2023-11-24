@@ -1,7 +1,38 @@
 import streamlit as st
 import pandas as pd
-from main import get_profesores, guardar_taller, get_insumos_lider, get_insumos_mercadolibre
 import requests
+
+
+def get_insumos_lider_usando_api(descripcion):
+    # Endpoint para obtener los insumos disponibles en LIDER
+    endpoint = f"http://localhost:8000/insumosLider/{descripcion}"
+
+    # Realizar la solicitud GET
+    response = requests.get(endpoint)
+
+    # Verificar si la solicitud fue exitosa (código de estado 200)
+    if response.status_code == 200:
+        # Imprimir la respuesta JSON
+        return response.json()
+    else:
+        # Devolver un diccionario con el mensaje de error si la solicitud no fue exitosa
+        return {"error": f"Error al obtener insumos de LIDER. Código de estado: {response.status_code}"}
+
+
+def get_insumos_mercadolibre_usando_api(descripcion):
+    # Endpoint para obtener los insumos disponibles en MERCADOLIBRE
+    endpoint = f"http://localhost:8000/insumosMercadoLibre/{descripcion}"
+
+    # Realizar la solicitud GET
+    response = requests.get(endpoint)
+
+    # Verificar si la solicitud fue exitosa (código de estado 200)
+    if response.status_code == 200:
+        # Imprimir la respuesta JSON
+        return response.json()
+    else:
+        # Devolver un diccionario con el mensaje de error si la solicitud no fue exitosa
+        return {"error": f"Error al obtener insumos de MERCADOLIBRE. Código de estado: {response.status_code}"}
 
 
 
@@ -32,6 +63,24 @@ def guardar_taller_usando_api(nombre_tallerista, descripcion, enlace, tarifa):
         print(f"Error en la solicitud POST: {e}")
 
     
+def get_profesores_usando_api(descripcion):
+    #endpoint
+    url_endpoint = f"http://localhost:8000/profesores/{descripcion}"
+    
+    # Realizar la solicitud GET
+    response = requests.get(url_endpoint)
+    
+    # Verificar si la solicitud fue exitosa (código de estado 200)
+    if response.status_code == 200:
+        # Imprimir la respuesta JSON
+        return response.json()
+    else:
+        # Devolver un diccionario con el mensaje de error si la solicitud no fue exitosa
+        return {"error": f"Error al obtener profesores. Código de estado: {response.status_code}"}
+
+
+
+
 
 
 def mostrar_profesor(profesor, input, i):
@@ -41,10 +90,8 @@ def mostrar_profesor(profesor, input, i):
         st.info(f"**Enlace de Perfil y Contacto:** [Visitar]({profesor['enlace_perfil']})", icon="🔗")
         st.success(f"**Tarifa:** {profesor['tarifa']}", icon="💸")
                        
-        
         # Crear un botón que llame a la función sin recargar la página completa
         checkbox_state = st.checkbox(f"Guardar Tallerista {i+1}")
-        
         
         if f'checkbox{i+1}' not in st.session_state:
             st.session_state[f'checkbox{i+1}'] = False
@@ -122,31 +169,73 @@ def main():
         # Barra de entrada de texto
         user_input = st.text_area("Ingresa tu Descripción:", height=100, key="user_input")
 
-        # Botón integrado en la barra de búsqueda y para realizar la llamada a la API
-        submit_button = st.button("Obtener Listado")
-        
+
         if "load_state" not in st.session_state:
             st.session_state.load_state = False
 
-        if 'hola' not in st.session_state:
-            st.session_state['hola'] = False
+        if 'buttonOnClick' not in st.session_state:
+            st.session_state['buttonOnClick'] = False
         
+        # Botón integrado en la barra de búsqueda y para realizar la llamada a la API
+        submit_button = st.button("Obtener Listado")
+        
+        
+        # Variable para controlar la visibilidad del botón
+        #boton_visible = False
+
+        # Botón que será visible o invisible según el valor de la variable
+        #if submit_button:
+        #    boton_visible = not boton_visible
+
+        # Mostrar el botón solo si la variable es True
+        #if boton_visible:
+        #    st.button("Este es el botón visible")
+        #    st.write("¡Excelente! ¡Funcionó!")
+            
+                
         # Lógica para realizar la llamada a la API al hacer clic o presionar "Enter"
         if submit_button or st.session_state.load_state:
+            #boton_visible = not boton_visible
+                        
             st.session_state.load_state = True
-            # Mostrar información adicional en una sección desplegable
-            #insumos_result_lider = get_insumos_lider(user_input)
-            #insumos_result_mercadolibre = get_insumos_mercadolibre(user_input)
-    
-            if (st.session_state['hola'] == False):
-                if 'respuesta' not in st.session_state:
-                    st.session_state['respuesta'] = get_profesores(user_input)
-                st.session_state['hola'] = True
 
-            #mostrar_informacion_adicional(insumos_result_lider, insumos_result_mercadolibre)
-            mostrar_respuesta_api(st.session_state['respuesta'], user_input)
+            #codigo para que se actualice la pagina al cambiar la descripcion
+            #if 'description' in st.session_state:
+            #    if st.session_state['description'] != user_input:
+            #        st.session_state['buttonOnClick'] = False
+            #        if 'insumos_result_lider' in st.session_state:
+            #            del st.session_state['insumos_result_lider'] 
+            #            
+            #        if 'insumos_result_mercadolibre' in st.session_state:
+            #            del st.session_state['insumos_result_mercadolibre']
+            #        
+            #        if 'respuesta_prof' in st.session_state:
+            #            del st.session_state['respuesta_prof']
+            #            
+            #        #establecer la descripcion
+            #        del st.session_state['description']
+            #
             
             
+            if (st.session_state['buttonOnClick'] == False):
+                if 'respuesta_prof' not in st.session_state:
+                    st.session_state['respuesta_prof'] = get_profesores_usando_api(user_input)
+                
+                if 'insumos_result_lider' not in st.session_state:
+                    st.session_state['insumos_result_lider'] = get_insumos_lider_usando_api(user_input)
+                
+                if 'insumos_result_mercadolibre' not in st.session_state:
+                    st.session_state['insumos_result_mercadolibre'] = get_insumos_mercadolibre_usando_api(user_input)
+                
+                st.session_state['buttonOnClick'] = True
+                
+                if "description" not in st.session_state:
+                    st.session_state['description'] = user_input
+        
+
+            mostrar_informacion_adicional(st.session_state['insumos_result_lider'], st.session_state['insumos_result_mercadolibre'])
+            mostrar_respuesta_api(st.session_state['respuesta_prof'], user_input)
+
             
     elif menu_opcion == "Historial de Búsqueda 📝":
         # Endpoint para obtener datos de la base de datos
