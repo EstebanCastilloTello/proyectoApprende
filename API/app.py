@@ -110,7 +110,7 @@ def main():
             
     elif menu_opcion == "Historial de Búsqueda 📝":
         # Endpoint para obtener datos de la base de datos
-        endpoint = "http://localhost:8000/historialGuardados"  # Reemplaza con la URL correcta de tu servidor
+        endpoint = "http://localhost:8000/historialGuardados" 
 
         # Obtener datos desde el endpoint
         response = requests.get(endpoint)
