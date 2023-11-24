@@ -34,6 +34,17 @@ options.add_argument('--headless')
 
 driver = webdriver.Chrome(options=options)
 
+#funcion para buscar tarifa
+def buscar_tarifa(linkPerfilProfesor):
+    
+    driver.get(linkPerfilProfesor)
+    
+    # Espera hasta que se carguen los elementos con la clase "value"
+    wait = WebDriverWait(driver, 10)
+    tarifa = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'value')))
+
+    return tarifa[0].text
+
 
 #funcion para encontrar palabra clave en descripcion usando openai
 def encontrar_palabra_clave_descripcion(descripcion):
@@ -59,7 +70,7 @@ def buscar_profesores(temaMateria):
 
     url_superProf = 'https://www.superprof.cl/s/' + temaMateria + ',Chile,,,1.html'
 
-    # Página a buscar
+    # Pagina a buscar
     driver.get(url_superProf)
 
     # Espera hasta que se carguen los elementos con la clase "landing-v4-ads-pic-firstname"
@@ -73,9 +84,7 @@ def buscar_profesores(temaMateria):
     for i in range(len(nombreProfesor)):
         nombre = nombreProfesor[i].text
         link = linkPerfilProfesor[i].get_attribute('href')
-        profesores.append({"nombre": nombre, "enlace_perfil": link})
-
-    
+        profesores.append({"nombre": nombre, "enlace_perfil": link, "tarifa": ""})
 
     return profesores
 
@@ -222,6 +231,10 @@ def get_profesores(descripcion_taller: str):
     #llamar a la funcion de buscar profesores en superprof
     resultado = buscar_profesores(temaTaller)
     
+    #por cada profesor, buscar su tarifa
+    for profesor in resultado:
+        tarifa = buscar_tarifa(profesor["enlace_perfil"])
+        profesor["tarifa"] = tarifa
 
     #para test, no usa openai, solo llama a superprof
     #resultado = buscar_profesores(descripcion_taller)
@@ -317,7 +330,7 @@ def get_insumos_mercadolibre(descripcion_taller: str):
 #-----------------------------------------------------
 #Funcion para añadir datos a la base de datos
 
-def guardar_taller(tallerista, descripcion, link):
+def guardar_taller(tallerista, descripcion, link, tarifa):
     #fecha actual
     hoy = datetime.datetime.now()
     fecha_hoy = hoy.strftime("%y-%m-%d")
@@ -327,11 +340,11 @@ def guardar_taller(tallerista, descripcion, link):
     hoja = libro.active
 
     #Contador para manejar las id
-    row_counter = hoja['A1'].value
-    hoja['A1'] = row_counter + 1
-    hoja.append([row_counter+1, tallerista, descripcion, link, fecha_hoy])
-    print(hoja['A1'].value)
-
+    if tallerista != None:
+        row_counter = hoja['A1'].value
+        hoja['A1'] = row_counter + 1
+        hoja.append([row_counter+1, tallerista, tarifa, descripcion, link, fecha_hoy])
+    print(row_counter, tallerista)
     #Guardamos los cambios realizados
     libro.save('DB.xlsx')
 #-----------------------------------------------------
