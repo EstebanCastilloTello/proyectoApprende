@@ -108,13 +108,16 @@ def buscar_insumos_lider(insumo, cantidad=1, tiempo_espera=5):
     # URL del supermercado
     url_supermercado = "https://www.lider.cl/supermercado/search?query=" + insumo
 
-    # Página a buscar
+    # PÃ¡gina a buscar
     driver.get(url_supermercado)
     
     # Espera hasta que se carguen los elementos con la clase "product-card_description-wrapper"
     wait = WebDriverWait(driver, tiempo_espera)
-    descripcionProducto = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'product-card_description-wrapper')))
-
+    try:
+        descripcionProducto = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'product-card_description-wrapper')))
+    except:
+        return []
+        
     # Obtener nombres de los primeros 'cantidad' productos
     productos = [element.text for element in descripcionProducto[:cantidad]]
 
@@ -138,18 +141,21 @@ def buscar_insumos_lider(insumo, cantidad=1, tiempo_espera=5):
 
 
 def buscar_insumos_mercadoLibre(insumo, cantidad=1, tiempo_espera=5):
-
     # URL del proveedor de insumos
     url_proveedor_insumos = "https://listado.mercadolibre.cl/" + insumo
 
-    # Página a buscar
+    # PÃ¡gina a buscar
     driver.get(url_proveedor_insumos)
     
     # Espera hasta que se carguen los elementos con la clase "product-card_description-wrapper"
     wait = WebDriverWait(driver, tiempo_espera)
-    descripcionProducto = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'ui-search-item__title')))
-
     
+    try:
+        descripcionProducto = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, 'ui-search-item__title')))    
+    except:
+        return []
+    
+
     # Obtener nombres de los primeros 'cantidad' productos
     productos = [element.text for element in descripcionProducto[:cantidad]]
 
@@ -167,7 +173,6 @@ def buscar_insumos_mercadoLibre(insumo, cantidad=1, tiempo_espera=5):
         productos_lista.append({"nombre": productos[i], "link": enlaces[i]})
         
     
-
     return productos_lista
 
 
@@ -312,7 +317,7 @@ def get_insumos_mercadolibre(descripcion_taller: str):
 #-----------------------------------------------------
 #Funcion para añadir datos a la base de datos
 
-def guardar_taller(tallerista, tema, link):
+def guardar_taller(tallerista, descripcion, link):
     #fecha actual
     hoy = datetime.datetime.now()
     fecha_hoy = hoy.strftime("%y-%m-%d")
@@ -324,7 +329,7 @@ def guardar_taller(tallerista, tema, link):
     #Contador para manejar las id
     row_counter = hoja['A1'].value
     hoja['A1'] = row_counter + 1
-    hoja.append([row_counter+1, tallerista, tema, link, fecha_hoy])
+    hoja.append([row_counter+1, tallerista, descripcion, link, fecha_hoy])
     print(hoja['A1'].value)
 
     #Guardamos los cambios realizados
