@@ -328,29 +328,95 @@ def get_insumos_mercadolibre(descripcion_taller: str):
             
 
 #-----------------------------------------------------
-#Funcion para añadir datos a la base de datos
+import csv
+from fastapi import FastAPI
+from fastapi.responses import JSONResponse
+import os
+import datetime
 
+app = FastAPI()
+
+#endpoint para añadir datos a la base de datos
+@app.get("/guardarTaller/{tallerista}/{descripcion}/{link}/{tarifa}")
 def guardar_taller(tallerista, descripcion, link, tarifa):
-    #fecha actual
+    # fecha actual
     hoy = datetime.datetime.now()
-    fecha_hoy = hoy.strftime("%y-%m-%d")
+    fecha_hoy = hoy.strftime("%y-%m-%d/%H:%M:%S")
 
-    #abrir el archivo .xlsx
-    libro = load_workbook('DB.xlsx')
-    hoja = libro.active
+    # si no existe el archivo, crearlo
+    if not os.path.isfile('DB.csv'):
+        with open('DB.csv', mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['id', 'nombre_tallerista', 'tarifa', 'descripcion', 'link', 'fecha'])
 
-    #Contador para manejar las id
-    if tallerista != None:
-        row_counter = hoja['A1'].value
-        hoja['A1'] = row_counter + 1
-        hoja.append([row_counter+1, tallerista, tarifa, descripcion, link, fecha_hoy])
-    print(row_counter, tallerista)
-    #Guardamos los cambios realizados
-    libro.save('DB.xlsx')
+    # abrir el archivo CSV
+    with open('DB.csv', mode='a', newline='') as file:
+        writer = csv.writer(file)
+
+        # Contador para manejar las id
+        if tallerista is not None:
+            try:
+                with open('DB.csv', 'r') as file:
+                    lector_csv = csv.reader(file)
+
+                    # Leer las filas del archivo CSV
+                    filas = list(lector_csv)
+                    
+                    if len(filas) == 1:
+                        #solo está el header
+                        #iniciar id en 0
+                        next_id = 0
+                    else:
+                        # Acceder al valor del ID del último elemento y sumar 1 a next_id
+                        ultimo_id = int(filas[-1][0])
+                        next_id = ultimo_id + 1
+
+                writer.writerow([next_id, tallerista, tarifa, descripcion, link, fecha_hoy])
+
+                print(next_id, tallerista)
+
+                return JSONResponse(content={"message": "Datos guardados en CSV"}, status_code=200)
+            except Exception as e:
+                return JSONResponse(content={"message": f"Error: {e}"}, status_code=500)
+        else:
+            return JSONResponse(content={"message": "Error en los parámetros"}, status_code=400)
+
 #-----------------------------------------------------
 
+#endpoint para obtener datos de la base de datos
+@app.get("/historialGuardados")
+def get_historial_guardados():
+    # si no existe el archivo, crearlo
+    if not os.path.isfile('DB.csv'):
+        with open('DB.csv', mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['id', 'nombre_tallerista', 'tarifa', 'descripcion', 'link', 'fecha'])
 
-# Cerrar el controlador de Selenium, eventualmente
-#por mientras no cerrarlo
-#creo que no se debería cerrar nunca mientras la api este corriendo
+    # abrir el archivo CSV
+    with open('DB.csv', mode='r', newline='') as file:
+        reader = csv.reader(file)
+        # Leer las filas del archivo CSV
+        filas = list(reader)
+        # Eliminar el header
+        filas.pop(0)
+        # Crear una lista de diccionarios para guardar los talleres
+        talleres = []
+        # Por cada fila en el archivo CSV
+        for fila in filas:
+            # Crear un diccionario para guardar los datos del taller
+            taller = {
+                'id': fila[0],
+                'nombre_tallerista': fila[1],
+                'tarifa': fila[2],
+                'descripcion': fila[3],
+                'link': fila[4],
+                'fecha': fila[5]
+            }
+            # Agregar el diccionario a la lista de talleres
+            talleres.append(taller)
+
+        return JSONResponse(content={"talleres": talleres}, status_code=200)
+
+
+# Cerrar el controlador de Selenium, dejarlo comentado para que no se cierre mientras se ejecuta la API
 #driver.quit()
