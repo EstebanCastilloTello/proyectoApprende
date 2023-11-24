@@ -5,14 +5,42 @@ import requests
 
 
 
+def guardar_taller_usando_api(nombre_tallerista, descripcion, enlace, tarifa):
+    # el endpoint es @app.post("/guardarTaller")
+    
+    endpoint = "http://localhost:8000/guardarTaller"
+    
+    # Crear un diccionario con los datos que se enviarán en el cuerpo del POST
+    data = {
+        "tallerista": nombre_tallerista,
+        "descripcion": descripcion,
+        "link": enlace,
+        "tarifa": tarifa
+    }
+
+    try:
+        # Enviar la solicitud POST con los datos en el cuerpo
+        response = requests.post(endpoint, json=data)
+
+        # Verificar el código de estado de la respuesta
+        if response.status_code == 200:
+            print("Datos guardados exitosamente en la API.")
+        else:
+            print(f"Error al guardar datos. Código de estado: {response.status_code}")
+            print(response.json())
+    except Exception as e:
+        print(f"Error en la solicitud POST: {e}")
+
+    
+
+
 def mostrar_profesor(profesor, input, i):
     """Muestra la información de un profesor en Streamlit."""
     if "nombre" in profesor and "enlace_perfil" in profesor :
         st.success(f"**Nombre:** {profesor['nombre']}", icon="🦸")
         st.info(f"**Enlace de Perfil y Contacto:** [Visitar]({profesor['enlace_perfil']})", icon="🔗")
         st.success(f"**Tarifa:** {profesor['tarifa']}", icon="💸")
-                 #guardar_taller(str({profesor['nombre']})[2:-2], str(input), str({profesor['enlace_perfil']})[2:-2], str({profesor['tarifa']})[2:-2])
-               
+                       
         
         # Crear un botón que llame a la función sin recargar la página completa
         checkbox_state = st.checkbox(f"Guardar Tallerista {i+1}")
@@ -24,12 +52,18 @@ def mostrar_profesor(profesor, input, i):
         if checkbox_state and st.session_state[f'checkbox{i+1}'] == False:
             st.write("Guardado")
             # Guardar solo al profesor del checkbox correspondiente
-            guardar_taller(profesor['nombre'], input, profesor['enlace_perfil'], profesor['tarifa'])
+            #input es la descripcion
+            guardar_taller_usando_api(profesor['nombre'], input, profesor['enlace_perfil'], profesor['tarifa'])
+            
             st.session_state[f'checkbox{i+1}'] = True
         
         elif checkbox_state and st.session_state[f'checkbox{i+1}'] == True:
             st.write("Tallerista ya ha sido guardado")
         st.write("----------------------------------------------------------------")
+
+
+
+
 
 def mostrar_respuesta_api(respuesta, input):
     """Muestra la respuesta de la API en Streamlit."""
@@ -38,6 +72,9 @@ def mostrar_respuesta_api(respuesta, input):
         st.write("----------------------------------------------------------------")
         for i, profesor in enumerate(respuesta["profesores"]):
             mostrar_profesor(profesor, input, i)
+
+
+
 
 def mostrar_informacion_adicional(insumos_lider, insumos_mercadolibre):
     """Muestra información adicional en una sección desplegable."""
@@ -63,6 +100,9 @@ def mostrar_informacion_adicional(insumos_lider, insumos_mercadolibre):
                 st.write("----")
         else:
             st.write("No se encontraron insumos para mostrar.")
+
+
+
 
 def main():
     # Agregar un menú de navegación en la barra lateral
@@ -117,26 +157,33 @@ def main():
         data = response.json()
         talleres = data["talleres"]
 
-        # Crear un DataFrame de Pandas con los datos
-        df = pd.DataFrame(talleres)
-
-        # Renombrar las columnas según tus preferencias
-        nombres_columnas = {
-            'id': 'ID',
-            'nombre_tallerista': 'Nombre del Tallerista',
-            'tarifa': 'Tarifa por hora',
-            'descripcion': 'Descripción',
-            'link': 'Enlace',
-            'fecha': 'Fecha',
-        }
-
-        # Renombrar las columnas del DataFrame
-        df.rename(columns=nombres_columnas, inplace=True)
-
-        # Mostrar el DataFrame en Streamlit con la opción de ordenar
+        #establecer el titulo
         st.title("Historial de Búsqueda")
-        st.dataframe(df.sort_values(by="Nombre del Tallerista"))
-    
+        
+        #verificar si hay talleres guardados
+        if len(talleres) > 0:
+            # Crear un DataFrame de Pandas con los datos
+            df = pd.DataFrame(talleres)
+
+            # Renombrar las columnas según tus preferencias
+            nombres_columnas = {
+                'id': 'ID',
+                'nombre_tallerista': 'Nombre del Tallerista',
+                'tarifa': 'Tarifa por hora',
+                'descripcion': 'Descripción',
+                'link': 'Enlace',
+                'fecha': 'Fecha',
+            }
+
+            # Renombrar las columnas del DataFrame
+            df.rename(columns=nombres_columnas, inplace=True)
+
+            # Mostrar el DataFrame en Streamlit con la opción de ordenar
+            st.dataframe(df.sort_values(by="Nombre del Tallerista"))
+            
+        else:
+            #si no hay talleres guardados solo escirbir un mensaje
+            st.write("No hay talleres guardados")
 
 
 if __name__ == "__main__":

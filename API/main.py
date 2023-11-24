@@ -4,12 +4,18 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
 #api
 from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
+import csv
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+
 #openai
 import openai
+
 #dotenv
 import os
 from dotenv import load_dotenv
@@ -215,12 +221,6 @@ if __name__ == "__main__":
     # Cambia el puerto y el host según tus preferencias.
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
-# endpoint de prueba
-@app.get("/multiplicar/{numero}")
-def multiplicar_numero(numero: int):
-    resultado = numero * 2
-    return {"resultado": resultado}
-
 
 @app.get("/profesores/{descripcion_taller}")
 def get_profesores(descripcion_taller: str):
@@ -328,17 +328,17 @@ def get_insumos_mercadolibre(descripcion_taller: str):
             
 
 #-----------------------------------------------------
-import csv
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-import os
-import datetime
 
-app = FastAPI()
+#clase para guardar datos en la base de datos para usar en el endpoint de guardar taller POST
+class TallerData(BaseModel):
+    tallerista: str
+    descripcion: str
+    link: str
+    tarifa: str
 
-#endpoint para añadir datos a la base de datos
-@app.get("/guardarTaller/{tallerista}/{descripcion}/{link}/{tarifa}")
-def guardar_taller(tallerista, descripcion, link, tarifa):
+# endpoint para añadir datos a la base de datos
+@app.post("/guardarTaller")
+def guardar_taller(taller_data: TallerData):
     # fecha actual
     hoy = datetime.datetime.now()
     fecha_hoy = hoy.strftime("%y-%m-%d/%H:%M:%S")
@@ -354,7 +354,7 @@ def guardar_taller(tallerista, descripcion, link, tarifa):
         writer = csv.writer(file)
 
         # Contador para manejar las id
-        if tallerista is not None:
+        if taller_data.tallerista is not None:
             try:
                 with open('DB.csv', 'r') as file:
                     lector_csv = csv.reader(file)
@@ -363,24 +363,23 @@ def guardar_taller(tallerista, descripcion, link, tarifa):
                     filas = list(lector_csv)
                     
                     if len(filas) == 1:
-                        #solo está el header
-                        #iniciar id en 0
+                        # solo está el header
+                        # iniciar id en 0
                         next_id = 0
                     else:
                         # Acceder al valor del ID del último elemento y sumar 1 a next_id
                         ultimo_id = int(filas[-1][0])
                         next_id = ultimo_id + 1
 
-                writer.writerow([next_id, tallerista, tarifa, descripcion, link, fecha_hoy])
+                writer.writerow([next_id, taller_data.tallerista, taller_data.tarifa, taller_data.descripcion, taller_data.link, fecha_hoy])
 
-                print(next_id, tallerista)
+                print(next_id, taller_data.tallerista)
 
                 return JSONResponse(content={"message": "Datos guardados en CSV"}, status_code=200)
             except Exception as e:
                 return JSONResponse(content={"message": f"Error: {e}"}, status_code=500)
         else:
             return JSONResponse(content={"message": "Error en los parámetros"}, status_code=400)
-
 #-----------------------------------------------------
 
 #endpoint para obtener datos de la base de datos
