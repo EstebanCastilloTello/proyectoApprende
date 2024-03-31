@@ -1,5 +1,7 @@
 # proyectoApprende
 Se continuara con este proyecto en el semetre 2024-01
+
+
 Este es un repositorio donde se van a ir almacenando los avances del proyecto.
 
 
