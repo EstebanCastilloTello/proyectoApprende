@@ -24,12 +24,7 @@ Ejecutar api con:
 uvicorn API.main:app --reload
 
 
-api ejecutandose en puerto 8000
-
-
-Para ejecutar web (ya no se ocupa):
-
-python -m http.server 8080 --directory web      
+api ejecutandose en puerto 8000  
 
 
 
