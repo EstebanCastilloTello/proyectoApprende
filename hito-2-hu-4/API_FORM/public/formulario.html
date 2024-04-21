@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="h-screen overflow-hidden flex items-center justify-center" style="background: #edf2f7;">
+<style>
+  .-z-1 {
+    z-index: -1;
+  }
+
+  .origin-0 {
+    transform-origin: 0%;
+  }
+
+  input:focus ~ label,
+  input:not(:placeholder-shown) ~ label,
+  textarea:focus ~ label,
+  textarea:not(:placeholder-shown) ~ label,
+  select:focus ~ label,
+  select:not([value='']):valid ~ label {
+    /* @apply transform; scale-75; -translate-y-6; */
+    --tw-translate-x: 0;
+    --tw-translate-y: 0;
+    --tw-rotate: 0;
+    --tw-skew-x: 0;
+    --tw-skew-y: 0;
+    transform: translateX(var(--tw-translate-x)) translateY(var(--tw-translate-y)) rotate(var(--tw-rotate))
+      skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+    --tw-scale-x: 0.75;
+    --tw-scale-y: 0.75;
+    --tw-translate-y: -1.5rem;
+  }
+
+  input:focus ~ label,
+  select:focus ~ label {
+    /* @apply text-black; left-0; */
+    --tw-text-opacity: 1;
+    color: rgba(0, 0, 0, var(--tw-text-opacity));
+    left: 0px;
+  }
+</style>
+
+<div class="min-h-screen bg-gray-100 p-0 sm:p-12">
+  <div class="mx-auto max-w-md px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl">
+    <h1 class="text-2xl font-bold mb-8">Formulario tallerista</h1>
+    <form id="form"  novalidate>
+      <div class="relative z-0 w-full mb-5">
+        <input
+          type="text"
+          name="nombre"
+          id = "nombre"
+          placeholder=" "
+          required
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+        />
+        <label for="nombre" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu nombre</label>
+        <span class="text-sm text-red-600 hidden" id="error">Campo obligatorio</span>
+      </div>
+
+      <div class="relative z-0 w-full mb-5">
+        <input
+          type="text"
+          name="apellido"
+          id = "apellido"
+          placeholder=" "
+          required
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+        />
+        <label for="apellido" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu apellido</label>
+        <span class="text-sm text-red-600 hidden" id="error">Campo obligatorio</span>
+      </div>
+
+      <div class="relative z-0 w-full mb-5">
+        <input
+          type="email"
+          name="email"
+          id = 'email'
+          placeholder=" "
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+        />
+        <label for="email" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu correo electronico</label>
+        <span class="text-sm text-red-600 hidden" id="error">Campo obligatorio</span>
+      </div>
+
+      <fieldset class="relative z-0 w-full p-px mb-5">
+        <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Escoge una opcion</legend>
+        <div class="block pt-3 pb-2 space-x-4">
+          <label>
+            <input
+              type="radio"
+              name="tipo_clase"
+              value="Online"
+              class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+            />
+            Online
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="tipo_clase"
+              value="Presencial"
+              class="mr-2 text-black border-2 border-gray-300 focus:border-gray-300 focus:ring-black"
+            />
+            Presencial
+          </label>
+        </div>
+        <span class="text-sm text-red-600 hidden" id="error">Tienes que seleccionar una opcion</span>
+      </fieldset>
+
+      <div class="relative z-0 w-full mb-5">
+        <select
+          name="tipo_pago"
+          id = "tipo_pago"
+          value=""
+          onclick="this.setAttribute('value', this.value);"
+          class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+        >
+          <option value="" selected disabled hidden></option>
+          <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+          <option value="Redcompra">Redcompra</option>
+          <option value="Paypal">Paypal</option>
+        </select>
+        <label for="tipo_pago" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Opcion de pago</label>
+        <span class="text-sm text-red-600 hidden" id="error">Necesitas seleccionar una opcion</span>
+      </div>
+
+      <div class="flex flex-row space-x-4">
+        <div class="relative z-0 w-full mb-5">
+          <input
+            type="date"
+            name="disponibilidad"
+            id = "disponibilidad"
+            placeholder=" "
+            onclick="this.setAttribute('type', 'date');"
+            class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+          />
+          <label for="disponibilidad" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Disponibilidad</label>
+          <span class="text-sm text-red-600 hidden" id="error">Necesitas escoger una fecha</span>
+        </div>
+        <div class="relative z-0 w-full">
+          <input
+            type="time"
+            name="hora_aproximada"
+            id = "hora_aproximada"
+            placeholder=" "
+            onclick="this.setAttribute('type', 'time');"
+            class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+          />
+          <label for="hora_aproximada" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Hora</label>
+          <span class="text-sm text-red-600 hidden" id="error">Necesitas dar una hora</span>
+        </div>
+      </div>
+
+      <div class="relative z-0 w-full mb-5">
+        <input
+          type="number"
+          name="costo_clase"
+          id = "costo_clase"
+          placeholder=" "
+          class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+        />
+        <div class="absolute top-0 left-0 mt-3 ml-1 text-gray-400">$</div>
+        <label for="costo_clase" class="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Costo de la clase</label>
+        <span class="text-sm text-red-600 hidden" id="error">Necesitas dar un monto</span>
+      </div>
+
+      <div class="relative z-0 w-full mb-5">
+        <input
+          type="number"
+          name="duracion_clase"
+          id = "duracion_clase"
+          placeholder=" "
+          class="pt-3 pb-2 pr-12 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+        />
+        <div class="absolute top-0 right-0 mt-3 mr-4 text-gray-400">min</div>
+        <label for="duracion_clase" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Duracion de la clase</label>
+        <span class="text-sm text-red-600 hidden" id="error">Necesitas dar la duracion</span>
+      </div>
+
+      <button
+        id="button"
+        type="submit"
+        class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-pink-500 hover:bg-pink-600 hover:shadow-lg focus:outline-none"
+      >
+        Registrar formulario
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  'use strict'
+  document.getElementById('form').addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  const nombre = document.getElementById('nombre').value;
+  const apellido = document.getElementById('apellido').value;
+  const email = document.getElementById('email').value;
+  const tipoClase = document.querySelector('input[name="tipo_clase"]:checked').value; 
+  const tipoPago = document.getElementById('tipo_pago').value;
+  const disponibilidad = document.getElementById('disponibilidad').value; 
+  const horaAproximada = document.getElementById('hora_aproximada').value; 
+  const costoClase = document.getElementById('costo_clase').value; 
+  const duracionClase = document.getElementById('duracion_clase').value; 
+
+  // Crea un objeto con los datos del formulario
+  const formData = {
+    nombre: nombre,
+    apellido: apellido,
+    email: email,
+    tipo_clase: tipoClase,
+    tipo_pago: tipoPago,
+    disponibilidad: disponibilidad,
+    hora_aproximada: horaAproximada,
+    costo_clase: costoClase,
+    duracion_clase: duracionClase
+    
+  };
+
+
+  // Realiza una solicitud POST al backend
+  fetch('/formularios', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(formData) 
+  })
+  .then(response => {
+      if (response.ok) {
+        window.location.href = 'formready.html'; 
+      } else {
+        throw new Error('Error al enviar el formulario');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  });
+</script>
+</body>
+</html>

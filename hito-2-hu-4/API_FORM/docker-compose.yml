@@ -1,0 +1,11 @@
+version: "3.4"
+
+services:
+  api_form:
+    image: api_form
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8081:8081"
+
