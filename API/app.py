@@ -154,7 +154,7 @@ def mostrar_informacion_adicional(insumos_lider, insumos_mercadolibre):
 def main():
     # Agregar un menú de navegación en la barra lateral
     st.sidebar.title("Menú de Navegación")
-    menu_opcion = st.sidebar.radio("", ("Barra de Búsqueda 🔍", "Historial de Búsqueda 📝"))
+    menu_opcion = st.sidebar.radio(" ", ("Barra de Búsqueda 🔍", "Historial de Búsqueda 📝"))
 
     if menu_opcion == "Barra de Búsqueda 🔍":
         # Inicializar la variable de estado enter_pressed
