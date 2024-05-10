@@ -6,10 +6,9 @@ class UpdateTests(unittest.TestCase):
     valid_source_destination_request_data = None
     invalid_source_destination_request_data = None
 
-
     @classmethod
     def setUpClass(cls):
-        cls.base_url = "http://localhost:8081/formularios/5"
+        cls.base_url = "http://localhost:8081/formularios/1"
         cls.valid_source_destination_request_data = {
             "nombre": "Juan Carlos",
             "apellido": "Bododoque",
@@ -35,31 +34,26 @@ class UpdateTests(unittest.TestCase):
             "duracion_clase": "2"
         }
 
+    def test_update(self):
+        response = requests.put(self.base_url, json=self.valid_source_destination_request_data)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_invalid_name(self):
+        response = requests.put(self.base_url, json=self.invalid_source_destination_request_data)
+        
+        self.assertEqual(response.status_code, 400)
+
+    def test_update_invalid_get(self):
+        response = requests.get(self.base_url, json=self.invalid_source_destination_request_data)
+        
+        self.assertEqual(response.status_code, 404)
+
     @classmethod
-    def tearDown(cls):
-        del valid_source_destination_request_data
-        del invalid_source_destination_request_data_NOMBRE
-
-    def test_update(cls):
-        response = requests.post(cls.base_url, json=cls.valid_source_destination_request_data)
-        
-        resultado = json.load(response.json()["body"])["data"]
-
-        cls.assertAlmostEqual("200", resultado)
-
-    def test_update_invalid_name(cls):
-        response = requests.post(cls.base_url, json=cls.invalid_source_destination_request_data)
-        
-        resultado = json.load(response.json()["body"])["data"]
-
-        cls.assertAlmostEqual("400", resultado)
-
-    def test_update_invalid_get(cls):
-        response = requests.get(cls.base_url, json=cls.invalid_source_destination_request_data)
-        
-        resultado = json.load(response.json()["body"])["data"]
-
-        cls.assertAlmostEqual("403", resultado)
+    def tearDownClass(cls):
+        # Limpiar o realizar tareas de limpieza después de todas las pruebas en la clase
+        del cls.valid_source_destination_request_data
+        del cls.invalid_source_destination_request_data
 
 if __name__ == '__main__':
     unittest.main()
