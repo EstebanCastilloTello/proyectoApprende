@@ -22,6 +22,7 @@ DB_PASSWORD = "password"
 DB_NAME = "BD_FORM"
 DB_PORT = 3306
 DB_HOST = "host.docker.internal"
+API_KEY_OPENAI = ""
 De esta manera funcionaria correctamente el codigo. 
 Luego en base a la historia de usuario "5" hicimos que se mostraran todos los formularios ingresados a la base de datos
 y podamos editarlos haciendo click en un boton mediante el cual hace que salga una ventana emergente en donde se deben reingresar los datos 
