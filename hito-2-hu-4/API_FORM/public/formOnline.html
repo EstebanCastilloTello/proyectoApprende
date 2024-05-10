@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Formularios</title>
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<link rel="icon" href="apprende.png" type="image/png">
+	<link href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" rel=" stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+	
+	<!--Replace with your tailwind.css once created-->
+
+
+	<!--Regular Datatables CSS-->
+	<link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+	<!--Responsive Extension Datatables CSS-->
+	<link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+
+	<style>
+		/*Overrides for Tailwind CSS */
+
+		/*Form fields*/
+		.dataTables_wrapper select,
+		.dataTables_wrapper .dataTables_filter input {
+			color: #4a5568;
+			/*text-gray-700*/
+			padding-left: 1rem;
+			/*pl-4*/
+			padding-right: 1rem;
+			/*pl-4*/
+			padding-top: .5rem;
+			/*pl-2*/
+			padding-bottom: .5rem;
+			/*pl-2*/
+			line-height: 1.25;
+			/*leading-tight*/
+			border-width: 2px;
+			/*border-2*/
+			border-radius: .25rem;
+			border-color: #edf2f7;
+			/*border-gray-200*/
+			background-color: #edf2f7;
+			/*bg-gray-200*/
+		}
+
+		/*Row Hover*/
+		table.dataTable.hover tbody tr:hover,
+		table.dataTable.display tbody tr:hover {
+			background-color: #ebf4ff;
+			/*bg-indigo-100*/
+		}
+
+		/*Pagination Buttons*/
+		.dataTables_wrapper .dataTables_paginate .paginate_button {
+			font-weight: 700;
+			/*font-bold*/
+			border-radius: .25rem;
+			/*rounded*/
+			border: 1px solid transparent;
+			/*border border-transparent*/
+		}
+
+		/*Pagination Buttons - Current selected */
+		.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+			color: #fff !important;
+			/*text-white*/
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+			/*shadow*/
+			font-weight: 700;
+			/*font-bold*/
+			border-radius: .25rem;
+			/*rounded*/
+			background: #667eea !important;
+			/*bg-indigo-500*/
+			border: 1px solid transparent;
+			/*border border-transparent*/
+		}
+
+		/*Pagination Buttons - Hover */
+		.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+			color: #fff !important;
+			/*text-white*/
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .1), 0 1px 2px 0 rgba(0, 0, 0, .06);
+			/*shadow*/
+			font-weight: 700;
+			/*font-bold*/
+			border-radius: .25rem;
+			/*rounded*/
+			background: #667eea !important;
+			/*bg-indigo-500*/
+			border: 1px solid transparent;
+			/*border border-transparent*/
+		}
+
+		/*Add padding to bottom border */
+		table.dataTable.no-footer {
+			border-bottom: 1px solid #e2e8f0;
+			/*border-b-1 border-gray-300*/
+			margin-top: 0.75em;
+			margin-bottom: 0.75em;
+		}
+
+		/*Change colour of responsive icon*/
+		table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
+		table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+			background-color: #667eea !important;
+			/*bg-indigo-500*/
+		}
+	</style>
+
+
+
+</head>
+
+<body class="bg-gray-100 text-gray-900 tracking-wider leading-normal">
+
+
+	<!--Container-->
+	<div class="container w-full md:w-4/5 xl:w-3/5  mx-auto px-2">
+
+		<!--Title-->
+		<h1 class="flex items-center font-sans font-bold break-normal text-indigo-500 px-2 py-8 text-xl md:text-2xl">
+			Registro de formularios
+		</h1>
+
+
+		<!--Card-->
+		<div id='recipients' class="p-8 mt-6 lg:mt-0 rounded shadow bg-white">
+
+
+			<table id="example" class="stripe hover" style="width:100%; padding-top: 1em;  padding-bottom: 1em;">
+				<thead>
+					<tr>
+						<th data-priority="1">ID</th>
+						<th data-priority="2">Nombre</th>
+						<th data-priority="3">Apellido</th>
+						<th data-priority="4">Email</th>
+						<th data-priority="5">Modalidad</th>
+						<th data-priority="6">Pago</th>
+						<th data-priority="8">Hora</th>
+						<th data-priority="9">Costo</th>
+						<th data-priority="7">Duracion</th>
+					</tr>
+				</thead>
+				<tbody>
+
+				</tbody>
+
+			</table>
+
+
+		</div>
+		<!--/Card-->
+
+
+	</div>
+	<!--/container-->
+
+	<!-- jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<!--Datatables -->
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+<script>
+    // Hacer una solicitud GET al endpoint de tu backend
+    fetch('/formularios')
+        .then(response => response.json())
+        .then(data => {
+            // Construir la tabla dinámicamente después de obtener los datos
+            const tableBody = $('#example tbody');
+            data.forEach(item => {
+                const row = $('<tr>').appendTo(tableBody);
+                $('<td>').text(item.id).appendTo(row);
+                $('<td>').text(item.nombre).appendTo(row);
+                $('<td>').text(item.apellido).appendTo(row);
+                $('<td>').text(item.email).appendTo(row);
+                $('<td>').text(item.tipo_clase).appendTo(row);
+                $('<td>').text(item.tipo_pago).appendTo(row);
+                $('<td>').text(item.hora_aproximada).appendTo(row);
+                $('<td>').text(item.costo_clase).appendTo(row);
+                $('<td>').text(item.duracion_clase).appendTo(row);
+				// Agregar el botón a cada fila
+				// Crear el botón de edición con el diseño personalizado
+				const editButton = $('<button>').addClass('w-auto h-auto flex-1 h-full p-2 border border-blue-800 text-white shadow rounded-lg');
+				const flexContainer = $('<div>').addClass('w-auto h-auto');
+				const flexChild = $('<div>').addClass('flex-1 h-full');
+				const flexContent = $('<div>').addClass('flex items-center justify-center flex-1 h-full');
+				const iconContainer = $('<div>').addClass('relative');
+				const editIcon = $('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-800" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" /></svg>');
+
+				// Agregar el icono al contenedor
+				iconContainer.append(editIcon);
+
+				// Agregar los elementos al botón
+				flexContent.append(iconContainer);
+				flexChild.append(flexContent);
+				flexContainer.append(flexChild);
+				editButton.append(flexContainer);
+				editButton.click(() => {
+					const editUrl = `editForm.html?id=${item.id}`;
+					window.open(editUrl, '_blank', 'width=800,height=600'); 
+				});
+
+				// Agregar el botón editButton a la fila
+				$('<td>').append(editButton).appendTo(row);
+
+				
+				const deleteButton = $('<button>').addClass('bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded');
+				const deleteIcon = $('<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>');
+
+				deleteButton.append(deleteIcon);
+				deleteButton.click(() => {
+				const itemId = item.id;
+				const confirmDelete = confirm('¿Estás seguro de que deseas eliminar este elemento?');
+				if (confirmDelete) {
+					fetch(`http://localhost:8081/formularios/${itemId}`, {
+						method: 'DELETE'
+					})
+					.then(response => {
+						if (response.ok) {
+							row.remove();
+							console.log(`Elemento con ID ${itemId} eliminado exitosamente.`);
+							console.error('Error al eliminar el elemento:', response.statusText);
+						}
+					})
+					.catch(error => {
+						console.error('Error al eliminar el elemento:', error);
+					});
+				}
+			});
+
+				// Agregar el botón deleteButton a la fila
+				$('<td>').append(deleteButton).appendTo(row);
+			});
+            
+            // Inicializar DataTables después de construir la tabla
+            $('#example').DataTable({
+                responsive: true,
+            }).columns.adjust().responsive.recalc();
+        })
+        .catch(error => console.error('Error al obtener los datos:', error));
+</script>
+
+
+</body>
+
+</html>
+

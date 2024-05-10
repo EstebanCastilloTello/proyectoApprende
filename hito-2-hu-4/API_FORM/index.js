@@ -23,9 +23,20 @@ database.connect((err) => {
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+
+app.get('/formOnline', (req, res) => {
+    console.log('Ingresando a registro de formularios');
+    res.sendFile(path.join(__dirname, 'public', 'formOnline.html'));
+});
+
+app.get('/form', (req, res) => {
+    console.log('Accediendo a ingreso de formularios');
+    res.sendFile(path.join(__dirname, 'public', 'form.html'));
+});
+
 app.get('/', (req, res) => {
-    console.log('Accediendo a la ruta raíz');
-    res.sendFile(path.join(__dirname, 'public', 'formulario.html'));
+    console.log('Ingresando a inicio');
+    res.sendFile(path.join(__dirname, 'public', 'home.html'));
 });
 
 const routes = require('./src/routes/index');

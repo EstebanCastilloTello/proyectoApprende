@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.tailwindcss.com" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+	  <link rel="icon" href="apprende.png" type="image/png">
+
 </head>
 <body class="h-screen overflow-hidden flex items-center justify-center" style="background: #edf2f7;">
 <style>
@@ -23,7 +25,6 @@
   textarea:not(:placeholder-shown) ~ label,
   select:focus ~ label,
   select:not([value='']):valid ~ label {
-    /* @apply transform; scale-75; -translate-y-6; */
     --tw-translate-x: 0;
     --tw-translate-y: 0;
     --tw-rotate: 0;
@@ -38,7 +39,6 @@
 
   input:focus ~ label,
   select:focus ~ label {
-    /* @apply text-black; left-0; */
     --tw-text-opacity: 1;
     color: rgba(0, 0, 0, var(--tw-text-opacity));
     left: 0px;
@@ -47,13 +47,13 @@
 
 <div class="min-h-screen bg-gray-100 p-0 sm:p-12">
   <div class="mx-auto max-w-md px-6 py-12 bg-white border-0 shadow-lg sm:rounded-3xl">
-    <h1 class="text-2xl font-bold mb-8">Formulario tallerista</h1>
-    <form id="form"  novalidate>
+    <h1 class="text-2xl font-bold mb-8">Editar</h1>
+    <form id="form" novalidate>
       <div class="relative z-0 w-full mb-5">
         <input
           type="text"
           name="nombre"
-          id = "nombre"
+          id="nombre"
           placeholder=" "
           required
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
@@ -66,7 +66,7 @@
         <input
           type="text"
           name="apellido"
-          id = "apellido"
+          id="apellido"
           placeholder=" "
           required
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
@@ -79,16 +79,17 @@
         <input
           type="email"
           name="email"
-          id = 'email'
+          id="email"
           placeholder=" "
+          required
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
         />
-        <label for="email" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu correo electronico</label>
+        <label for="email" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu correo electrónico</label>
         <span class="text-sm text-red-600 hidden" id="error">Campo obligatorio</span>
       </div>
 
       <fieldset class="relative z-0 w-full p-px mb-5">
-        <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Escoge una opcion</legend>
+        <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Escoge una opción</legend>
         <div class="block pt-3 pb-2 space-x-4">
           <label>
             <input
@@ -109,44 +110,31 @@
             Presencial
           </label>
         </div>
-        <span class="text-sm text-red-600 hidden" id="error">Tienes que seleccionar una opcion</span>
+        <span class="text-sm text-red-600 hidden" id="error">Tienes que seleccionar una opción</span>
       </fieldset>
 
       <div class="relative z-0 w-full mb-5">
         <select
           name="tipo_pago"
-          id = "tipo_pago"
-          value=""
+          id="tipo_pago"
+          value="Transferencia Bancaria"
           onclick="this.setAttribute('value', this.value);"
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200"
         >
-          <option value="" selected disabled hidden></option>
-          <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+          <option value="Transferencia Bancaria" selected>Transferencia Bancaria</option>
           <option value="Redcompra">Redcompra</option>
           <option value="Paypal">Paypal</option>
         </select>
-        <label for="tipo_pago" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Opcion de pago</label>
-        <span class="text-sm text-red-600 hidden" id="error">Necesitas seleccionar una opcion</span>
+        <label for="tipo_pago" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Opción de pago</label>
+        <span class="text-sm text-red-600 hidden" id="error">Necesitas seleccionar una opción</span>
       </div>
 
       <div class="flex flex-row space-x-4">
-        <div class="relative z-0 w-full mb-5">
-          <input
-            type="date"
-            name="disponibilidad"
-            id = "disponibilidad"
-            placeholder=" "
-            onclick="this.setAttribute('type', 'date');"
-            class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
-          />
-          <label for="disponibilidad" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Disponibilidad</label>
-          <span class="text-sm text-red-600 hidden" id="error">Necesitas escoger una fecha</span>
-        </div>
         <div class="relative z-0 w-full">
           <input
             type="time"
             name="hora_aproximada"
-            id = "hora_aproximada"
+            id="hora_aproximada"
             placeholder=" "
             onclick="this.setAttribute('type', 'time');"
             class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
@@ -160,7 +148,7 @@
         <input
           type="number"
           name="costo_clase"
-          id = "costo_clase"
+          id="costo_clase"
           placeholder=" "
           class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
         />
@@ -173,13 +161,13 @@
         <input
           type="number"
           name="duracion_clase"
-          id = "duracion_clase"
+          id="duracion_clase"
           placeholder=" "
           class="pt-3 pb-2 pr-12 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
         />
         <div class="absolute top-0 right-0 mt-3 mr-4 text-gray-400">min</div>
-        <label for="duracion_clase" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Duracion de la clase</label>
-        <span class="text-sm text-red-600 hidden" id="error">Necesitas dar la duracion</span>
+        <label for="duracion_clase" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Duración de la clase</label>
+        <span class="text-sm text-red-600 hidden" id="error">Necesitas dar la duración</span>
       </div>
 
       <button
@@ -187,7 +175,7 @@
         type="submit"
         class="w-full px-6 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none bg-pink-500 hover:bg-pink-600 hover:shadow-lg focus:outline-none"
       >
-        Registrar formulario
+        Editar formulario
       </button>
     </form>
   </div>
@@ -195,45 +183,43 @@
 
 <script>
   'use strict'
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get('id');
+
   document.getElementById('form').addEventListener('submit', function(event) {
-  event.preventDefault();
+    event.preventDefault();
 
-  const nombre = document.getElementById('nombre').value;
-  const apellido = document.getElementById('apellido').value;
-  const email = document.getElementById('email').value;
-  const tipoClase = document.querySelector('input[name="tipo_clase"]:checked').value; 
-  const tipoPago = document.getElementById('tipo_pago').value;
-  const disponibilidad = document.getElementById('disponibilidad').value; 
-  const horaAproximada = document.getElementById('hora_aproximada').value; 
-  const costoClase = document.getElementById('costo_clase').value; 
-  const duracionClase = document.getElementById('duracion_clase').value; 
+    const nombre = document.getElementById('nombre').value;
+    const apellido = document.getElementById('apellido').value;
+    const email = document.getElementById('email').value;
+    const tipoClase = document.querySelector('input[name="tipo_clase"]:checked').value; 
+    const tipoPago = document.getElementById('tipo_pago').value;
+    const horaAproximada = document.getElementById('hora_aproximada').value; 
+    const costoClase = document.getElementById('costo_clase').value; 
+    const duracionClase = document.getElementById('duracion_clase').value; 
 
-  // Crea un objeto con los datos del formulario
-  const formData = {
-    nombre: nombre,
-    apellido: apellido,
-    email: email,
-    tipo_clase: tipoClase,
-    tipo_pago: tipoPago,
-    disponibilidad: disponibilidad,
-    hora_aproximada: horaAproximada,
-    costo_clase: costoClase,
-    duracion_clase: duracionClase
-    
-  };
+    const formData = {
+      nombre: nombre,
+      apellido: apellido,
+      email: email,
+      tipo_clase: tipoClase,
+      tipo_pago: tipoPago,
+      hora_aproximada: horaAproximada,
+      costo_clase: costoClase,
+      duracion_clase: duracionClase
+    };
 
-
-  // Realiza una solicitud POST al backend
-  fetch('/formularios', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(formData) 
-  })
-  .then(response => {
+    fetch(`/formularios/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => {
       if (response.ok) {
-        window.location.href = 'formready.html'; 
+        window.location.href = 'formReady.html'; // Redirige después de la actualización exitosa
       } else {
         throw new Error('Error al enviar el formulario');
       }
