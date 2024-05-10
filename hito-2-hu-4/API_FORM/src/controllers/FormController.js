@@ -18,7 +18,7 @@ const createTableForm = (req, res) => {
 
   database.query(query, (err) => {
     if (err) throw err;
-    res.send('Tabla de formularios creada');
+    res.status(200).send('Tabla de formularios creada');
   });
 };
 
@@ -31,7 +31,7 @@ const createForm = (req, res) => {
       console.error(err);
       res.status(500).send('Error al crear el formulario');
     } else {
-      res.send('Formulario creado');
+      res.status(200).send('Formulario creado');
     }
   });
 };
@@ -44,7 +44,7 @@ const getForms = (req, res) => {
       console.error(err);
       res.status(500).send('Error al obtener los formularios');
     } else {
-      res.json(results);
+      res.status(200).json(results);
     }
   });
 };
@@ -61,7 +61,8 @@ const getFormById = (req, res) => {
       if (result.length === 0) {
         res.status(404).send('Formulario no encontrado');
       } else {
-        res.json(result[0]);
+        res.status(200).json(result[0]);
+        
       }
     }
   });
@@ -80,7 +81,7 @@ const updateForm = (req, res) => {
       if (result.affectedRows === 0) {
         res.status(404).send('Formulario no encontrado');
       } else {
-        res.send('Formulario actualizado');
+        res.status(200).send('Formulario actualizado');
       }
     }
   });
@@ -95,7 +96,7 @@ const deleteForm = (req, res) => {
       console.error(err);
       res.status(500).send('Error al eliminar el formulario');
     } else {
-      res.send('Formulario eliminado');
+      res.status(200).send('Formulario eliminado');
     }
   });
 };
