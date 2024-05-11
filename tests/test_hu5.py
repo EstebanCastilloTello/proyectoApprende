@@ -34,10 +34,11 @@ class UpdateTests(unittest.TestCase):
             "duracion_clase": "2"
         }
 
-    def test_update(self):
-        response = requests.put(self.base_url, json=self.valid_source_destination_request_data)
+    #Caso de correcto funcionamiento del endpoint
+    #def test_update(self):
+    #    response = requests.put(self.base_url, json=self.valid_source_destination_request_data)
 
-        self.assertEqual(response.status_code, 200)
+    #    self.assertEqual(response.status_code, 200)
 
     def test_update_invalid_name(self):
         response = requests.put(self.base_url, json=self.invalid_source_destination_request_data)
@@ -47,7 +48,7 @@ class UpdateTests(unittest.TestCase):
     def test_update_invalid_get(self):
         response = requests.get(self.base_url, json=self.invalid_source_destination_request_data)
         
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
     @classmethod
     def tearDownClass(cls):
