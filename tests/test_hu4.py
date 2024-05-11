@@ -2,64 +2,64 @@ import unittest
 import requests
 import json
 
-class UpdateTests(unittest.TestCase):
-    valid_source_destination_request_data = None
-    invalid_source_destination_request_data = None
-
-
+class TestCreateForm(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.base_url = "http://localhost:8081/formularios/5"
-        cls.valid_source_destination_request_data = {
-            "nombre": "Juan Carlos",
-            "apellido": "Bododoque",
-            "email": "juancarlosb@sansano.usm.cl",
-            "tipo_clase": "Presencial",
-            "tipo_pago": "Paypal",
-            "disponibildad": "2023-12-31",
-            "hora_aproximada": "10:30:45.500000",
-            "costo_clase": "1000000",
-            "duracion_clase": "2"
-        }
-
-        cls.invalid_source_destination_request_data = {
-            "nombre": """CElUe!0P#W?Fl?L6a8Arb<3yz7ZD$kTLq#19jHmXfItYw<6?K,5Fo!R9I?eNBtZ+@sDyWzTioqT(1o@zZUx6c-l$+3B2R;I8n>4(fB*4Ewm@e6s7oWqz1qTncD?2wHak3Vv$r7DgQz7F;5D@zJl)7iL'pQW!C#<sP1S-Tm3mAbx1m4n%cQo$-<N<M84HR;0Y@WTR%8rF*vnG<ra6<6F!CjLyEPPT#AIS<PO5B7oAgMK$U#-0a;HhL$C5tE<aN
-""",
-            "apellido": "Bododoque",
-            "email": "juancarlosb@sansano.usm.cl",
-            "tipo_clase": "Presencial",
-            "tipo_pago": "Paypal",
-            "disponibildad": "2023-12-31",
-            "hora_aproximada": "10:30:45.500000",
-            "costo_clase": "1000000",
-            "duracion_clase": "2"
-        }
+        cls.base_url = "http://localhost:8081/formularios/"
+        print("Inicio de pruebas para 'createForm'")
 
     @classmethod
-    def tearDown(cls):
-        del valid_source_destination_request_data
-        del invalid_source_destination_request_data_NOMBRE
+    def tearDownClass(cls):
+        print("Pruebas completadas para 'createForm'")
 
-    def test_update(cls):
-        response = requests.post(cls.base_url, json=cls.valid_source_destination_request_data)
+    def test_create_form_success(self):
+        # Datos de prueba para un formulario exitoso
+        data = {
+            'nombre': 'Juan',
+            'apellido': 'Pérez',
+            'email': 'juan.perez@example.com',
+            'tipo_clase': 'Online',
+            'tipo_pago': 'Paypal',
+            'disponibilidad': '2022-09-01',
+            'hora_aproximada': '15:00:00',
+            'costo_clase': 50,
+            'duracion_clase': 60
+        }
+        response = requests.post(self.base_url, json=data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.text, 'Formulario creado')
+
+    def test_create_form_failure_due_to_missing_field(self):
+        # Datos de prueba faltando el campo 'email'
+        data = {
+            'nombre': 'Juan',
+            'apellido': 'Pérez',
+            'tipo_clase': 'Online',
+            'tipo_pago': 'Paypal',
+            'disponibilidad': '2022-09-01',
+            'hora_aproximada': '15:00:00',
+            'costo_clase': 50,
+            'duracion_clase': 60
+        }
+        response = requests.post(self.base_url, json=data)
+        self.assertEqual(response.status_code, 500)
+        self.assertIn('Error al crear el formulario', response.text)
         
-        resultado = json.load(response.json()["body"])["data"]
-
-        cls.assertAlmostEqual("200", resultado)
-
-    def test_update_invalid_name(cls):
-        response = requests.post(cls.base_url, json=cls.invalid_source_destination_request_data)
-        
-        resultado = json.load(response.json()["body"])["data"]
-
-        cls.assertAlmostEqual("400", resultado)
-
-    def test_update_invalid_get(cls):
-        response = requests.get(cls.base_url, json=cls.invalid_source_destination_request_data)
-        
-        resultado = json.load(response.json()["body"])["data"]
-
-        cls.assertAlmostEqual("403", resultado)
+    def test_create_form_failure_with_excessive_cost(self):
+        data = {
+            'nombre': 'Ana',
+            'apellido': 'López',
+            'email': 'ana.lopez@example.com',
+            'tipo_clase': 'Presencial',
+            'tipo_pago': 'Transferencia Bancaria',
+            'disponibilidad': '2022-10-01',
+            'hora_aproximada': '10:00:00',
+            'costo_clase': 1001,  # Valor ligeramente por encima del máximo permitido
+            'duracion_clase': 60
+        }
+        response = requests.post(self.base_url, json=data)
+        self.assertTrue(response.status_code in [400, 500])
+        self.assertIn('Error', response.text)
 
 if __name__ == '__main__':
     unittest.main()
