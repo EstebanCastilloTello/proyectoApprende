@@ -106,7 +106,7 @@ const updateForm = (req, res) => {
   database.query(query, [nombre, apellido, email, tipo_clase, tipo_pago, disponibilidad, hora_aproximada, costo_clase, duracion_clase, formId], (err, result) => {
     if (err) {
       console.error(err);
-      res.status(500).send('Error al actualizar el formulario');
+      res.status(403).send('Error al actualizar el formulario');
     } else {
       if (result.affectedRows === 0) {
         res.status(404).send('Formulario no encontrado');
