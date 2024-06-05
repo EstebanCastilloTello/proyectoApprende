@@ -24,6 +24,21 @@ const createTableForm = (req, res) => {
 
 const createForm = (req, res) => {
   const { nombre, apellido, email, tipo_clase, tipo_pago, disponibilidad, hora_aproximada, costo_clase, duracion_clase } = req.body;
+  
+  // Validar campos obligatorios
+  if (!nombre || !apellido || !email || !tipo_clase || !tipo_pago || !disponibilidad || !hora_aproximada || !costo_clase || !duracion_clase) {
+    return res.status(400).send('Todos los campos son obligatorios');
+  }
+
+  // Validar límites de los campos
+  if (costo_clase > 50000) {
+    return res.status(400).send('El costo de la clase no puede exceder 50000');
+  }
+  // Validar limite de duracion_clase
+  if (duracion_clase > 120) {
+    return res.status(400).send('La duracion de la clase no puede exceder de las 2 horas (120 min)');
+  }
+
   const query = 'INSERT INTO forms (nombre, apellido, email, tipo_clase, tipo_pago, disponibilidad, hora_aproximada, costo_clase, duracion_clase) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
   database.query(query, [nombre, apellido, email, tipo_clase, tipo_pago, disponibilidad, hora_aproximada, costo_clase, duracion_clase], (err) => {
@@ -62,7 +77,6 @@ const getFormById = (req, res) => {
         res.status(404).send('Formulario no encontrado');
       } else {
         res.status(200).json(result[0]);
-        
       }
     }
   });
@@ -71,6 +85,22 @@ const getFormById = (req, res) => {
 const updateForm = (req, res) => {
   const formId = req.params.id;
   const { nombre, apellido, email, tipo_clase, tipo_pago, disponibilidad, hora_aproximada, costo_clase, duracion_clase } = req.body;
+  
+  // Validar campos obligatorios
+  if (!nombre || !apellido || !email || !tipo_clase || !tipo_pago || !disponibilidad || !hora_aproximada || !costo_clase || !duracion_clase) {
+    return res.status(400).send('Todos los campos son obligatorios');
+  }
+
+  // Validar límites de los campos
+  if (costo_clase > 50000) {
+    return res.status(400).send('El costo de la clase no puede exceder 50000');
+  }
+
+  if (duracion_clase > 120) {
+    return res.status(400).send('La duracion de la clase no puede exceder las 2 horas (120 min)');
+  }
+
+
   const query = 'UPDATE forms SET nombre = ?, apellido = ?, email = ?, tipo_clase = ?, tipo_pago = ?, disponibilidad = ?, hora_aproximada = ?, costo_clase = ?, duracion_clase = ? WHERE id = ?';
 
   database.query(query, [nombre, apellido, email, tipo_clase, tipo_pago, disponibilidad, hora_aproximada, costo_clase, duracion_clase, formId], (err, result) => {

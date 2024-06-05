@@ -43,6 +43,9 @@
     color: rgba(0, 0, 0, var(--tw-text-opacity));
     left: 0px;
   }
+  .invalid {
+    border-color: red !important;
+  }
 </style>
 
 <div class="min-h-screen bg-gray-100 p-0 sm:p-12">
@@ -59,7 +62,7 @@
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
         />
         <label for="nombre" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu nombre</label>
-        <span class="text-sm text-red-600 hidden" id="error">Campo obligatorio</span>
+        <span class="text-sm text-red-600 hidden" id="error-nombre">Campo obligatorio</span>
       </div>
 
       <div class="relative z-0 w-full mb-5">
@@ -72,7 +75,7 @@
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
         />
         <label for="apellido" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu apellido</label>
-        <span class="text-sm text-red-600 hidden" id="error">Campo obligatorio</span>
+        <span class="text-sm text-red-600 hidden" id="error-apellido">Campo obligatorio</span>
       </div>
 
       <div class="relative z-0 w-full mb-5">
@@ -84,12 +87,12 @@
           required
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
         />
-        <label for="email" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu correo electrónico</label>
-        <span class="text-sm text-red-600 hidden" id="error">Campo obligatorio</span>
+        <label for="email" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Ingresa tu correo electronico</label>
+        <span class="text-sm text-red-600 hidden" id="error-email">Campo obligatorio</span>
       </div>
 
       <fieldset class="relative z-0 w-full p-px mb-5">
-        <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Escoge una opción</legend>
+        <legend class="absolute text-gray-500 transform scale-75 -top-3 origin-0">Escoge una opcion</legend>
         <div class="block pt-3 pb-2 space-x-4">
           <label>
             <input
@@ -110,23 +113,25 @@
             Presencial
           </label>
         </div>
-        <span class="text-sm text-red-600 hidden" id="error">Tienes que seleccionar una opción</span>
+        <span class="text-sm text-red-600 hidden" id="error-tipo_clase">Necesitas seleccionar una opcion</span>
       </fieldset>
 
       <div class="relative z-0 w-full mb-5">
         <select
           name="tipo_pago"
           id="tipo_pago"
-          value="Transferencia Bancaria"
+          value=""
           onclick="this.setAttribute('value', this.value);"
           class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none z-1 focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+          required
         >
-          <option value="Transferencia Bancaria" selected>Transferencia Bancaria</option>
+          <option value="" selected disabled hidden></option>
+          <option value="Transferencia Bancaria">Transferencia Bancaria</option>
           <option value="Redcompra">Redcompra</option>
           <option value="Paypal">Paypal</option>
         </select>
-        <label for="tipo_pago" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Opción de pago</label>
-        <span class="text-sm text-red-600 hidden" id="error">Necesitas seleccionar una opción</span>
+        <label for="tipo_pago" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Opcion de pago</label>
+        <span class="text-sm text-red-600 hidden" id="error-tipo_pago">Necesitas seleccionar una opcion</span>
       </div>
 
       <div class="flex flex-row space-x-4">
@@ -138,9 +143,10 @@
             placeholder=" "
             onclick="this.setAttribute('type', 'time');"
             class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+            required
           />
           <label for="hora_aproximada" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Hora</label>
-          <span class="text-sm text-red-600 hidden" id="error">Necesitas dar una hora</span>
+          <span class="text-sm text-red-600 hidden" id="error-hora_aproximada">Campo obligatorio</span>
         </div>
       </div>
 
@@ -151,10 +157,15 @@
           id="costo_clase"
           placeholder=" "
           class="pt-3 pb-2 pl-5 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+          required
+          min="0"
+          max="50000"
         />
         <div class="absolute top-0 left-0 mt-3 ml-1 text-gray-400">$</div>
         <label for="costo_clase" class="absolute duration-300 top-3 left-5 -z-1 origin-0 text-gray-500">Costo de la clase</label>
-        <span class="text-sm text-red-600 hidden" id="error">Necesitas dar un monto</span>
+        <span class="text-sm text-red-600 hidden" id="error-costo_clase">Campo obligatorio</span>
+        <span class="text-sm text-red-600 hidden" id="error-costo_clase_rango">El monto debe ser inferior a 50000</span>
+
       </div>
 
       <div class="relative z-0 w-full mb-5">
@@ -164,10 +175,14 @@
           id="duracion_clase"
           placeholder=" "
           class="pt-3 pb-2 pr-12 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"
+          required
+          min="0"
+          max="120"
         />
         <div class="absolute top-0 right-0 mt-3 mr-4 text-gray-400">min</div>
-        <label for="duracion_clase" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Duración de la clase</label>
-        <span class="text-sm text-red-600 hidden" id="error">Necesitas dar la duración</span>
+        <label for="duracion_clase" class="absolute duration-300 top-3 -z-1 origin-0 text-gray-500">Duracion de la clase</label>
+        <span class="text-sm text-red-600 hidden" id="error-duracion_clase">Campo obligatorio</span>
+        <span class="text-sm text-red-600 hidden" id="error-duracion_clase_rango">La duracion debe estar entre 0 y 120 minutos</span>
       </div>
 
       <button
@@ -190,25 +205,75 @@
   document.getElementById('form').addEventListener('submit', function(event) {
     event.preventDefault();
 
-    const nombre = document.getElementById('nombre').value;
-    const apellido = document.getElementById('apellido').value;
-    const email = document.getElementById('email').value;
-    const tipoClase = document.querySelector('input[name="tipo_clase"]:checked').value; 
-    const tipoPago = document.getElementById('tipo_pago').value;
-    const horaAproximada = document.getElementById('hora_aproximada').value; 
-    const costoClase = document.getElementById('costo_clase').value; 
-    const duracionClase = document.getElementById('duracion_clase').value; 
+    const form = document.getElementById('form');
+    const inputs = form.querySelectorAll('input, select');
+    let isValid = true;
+
+    inputs.forEach(input => {
+      const error = document.getElementById(`error-${input.name}`);
+      if (!input.value) {
+        input.classList.add('invalid');
+        error.classList.remove('hidden');
+        isValid = false;
+      } else {
+        input.classList.remove('invalid');
+        error.classList.add('hidden');
+      }
+    });
+
+    // Validación para el campo costo_clase
+    const costoClaseInput = document.getElementById('costo_clase');
+    const costoClaseError = document.getElementById('error-costo_clase');
+    const costoClaseValue = parseFloat(costoClaseInput.value);
+    if (!costoClaseValue) {
+      costoClaseInput.classList.add('invalid');
+      costoClaseError.textContent = 'Campo obligatorio';
+      costoClaseError.classList.remove('hidden');
+      isValid = false;
+    } else if (costoClaseValue < 0 || costoClaseValue > 50000) {
+      costoClaseInput.classList.add('invalid');
+      costoClaseError.textContent = 'El monto debe ser inferior a 50000';
+      costoClaseError.classList.remove('hidden');
+      isValid = false;
+    } else {
+      costoClaseInput.classList.remove('invalid');
+      costoClaseError.classList.add('hidden');
+    }
+
+    // Validación para el campo duracion_clase
+    const duracionClaseInput = document.getElementById('duracion_clase');
+    const duracionClaseError = document.getElementById('error-duracion_clase');
+    const duracionClaseValue = parseInt(duracionClaseInput.value);
+    if (!duracionClaseValue) {
+      duracionClaseInput.classList.add('invalid');
+      duracionClaseError.textContent = 'Campo obligatorio';
+      duracionClaseError.classList.remove('hidden');
+      isValid = false;
+    } else if (duracionClaseValue < 0 || duracionClaseValue > 120) {
+      duracionClaseInput.classList.add('invalid');
+      duracionClaseError.textContent = 'La duracion debe estar entre 0 y 120 minutos';
+      duracionClaseError.classList.remove('hidden');
+      isValid = false;
+    } else {
+      duracionClaseInput.classList.remove('invalid');
+      duracionClaseError.classList.add('hidden');
+    }
+
+    if (!isValid) {
+      return;
+    }
 
     const formData = {
-      nombre: nombre,
-      apellido: apellido,
-      email: email,
-      tipo_clase: tipoClase,
-      tipo_pago: tipoPago,
-      hora_aproximada: horaAproximada,
-      costo_clase: costoClase,
-      duracion_clase: duracionClase
+      nombre: document.getElementById('nombre').value,
+      apellido: document.getElementById('apellido').value,
+      email: document.getElementById('email').value,
+      tipo_clase: document.querySelector('input[name="tipo_clase"]:checked').value,
+      tipo_pago: document.getElementById('tipo_pago').value,
+      hora_aproximada: document.getElementById('hora_aproximada').value,
+      costo_clase: costoClaseValue,
+      duracion_clase: duracionClaseValue
     };
+
 
     fetch(`/formularios/${id}`, {
       method: 'PUT',
@@ -224,6 +289,7 @@
         throw new Error('Error al enviar el formulario');
       }
     })
+
     .catch(error => {
       console.error('Error:', error);
     });
