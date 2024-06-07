@@ -13,3 +13,6 @@ https://documenter.getpostman.com/view/27256435/2s9Ye8fEU8
 
 Version de Python 3.11.6\
 Version de pip 23.2.1
+
+VIDEO DEL HITO 4:
+https://youtu.be/3WVSM8O1Sv8
