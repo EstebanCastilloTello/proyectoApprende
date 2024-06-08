@@ -16,3 +16,4 @@ Version de pip 23.2.1
 
 VIDEO DEL HITO 4:
 https://youtu.be/3WVSM8O1Sv8
+LA PARTE ESCRITA DEL HITO 4 ESTA EN LA WIKI
