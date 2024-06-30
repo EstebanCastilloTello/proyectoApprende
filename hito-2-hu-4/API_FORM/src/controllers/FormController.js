@@ -131,7 +131,23 @@ const deleteForm = (req, res) => {
   });
 };
 
+function handleKeyPress(event) {
+  console.log('KeyPress event:', event.key);
+}
+
+function handleKeyDown(event) {
+  console.log('KeyDown event:', event.key);
+}
+
+function handleKeyUp(event) {
+  console.log('KeyUp event:', event.key);
+}
+
+
 module.exports = {
+  handleKeyPress,
+  handleKeyDown,
+  handleKeyUp,
   createTableForm,
   createForm,
   getForms,
