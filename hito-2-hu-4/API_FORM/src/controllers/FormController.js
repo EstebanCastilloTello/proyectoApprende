@@ -72,15 +72,14 @@ const getFormById = (req, res) => {
     if (err) {
       console.error(err);
       res.status(500).send('Error al obtener el formulario por ID');
+    } else if (result.length === 0) {
+      res.status(404).send('Formulario no encontrado');
     } else {
-      if (result.length === 0) {
-        res.status(404).send('Formulario no encontrado');
-      } else {
-        res.status(200).json(result[0]);
-      }
+      res.status(200).json(result[0]);
     }
   });
 };
+
 
 const updateForm = (req, res) => {
   const formId = req.params.id;
