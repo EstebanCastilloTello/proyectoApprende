@@ -58,7 +58,7 @@ class TestCreateForm(unittest.TestCase):
             'duracion_clase': 60
         }
         response = requests.post(self.base_url, json=data)
-        self.assertTrue(response.status_code in [400, 500])
+        self.assertIn(response.status_code in [400, 500])
         self.assertIn('Error', response.text)
 
 if __name__ == '__main__':
