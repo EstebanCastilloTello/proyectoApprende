@@ -106,15 +106,14 @@ const updateForm = (req, res) => {
     if (err) {
       console.error(err);
       res.status(403).send('Error al actualizar el formulario');
+    } else if (result.affectedRows === 0) {
+      res.status(404).send('Formulario no encontrado');
     } else {
-      if (result.affectedRows === 0) {
-        res.status(404).send('Formulario no encontrado');
-      } else {
-        res.status(200).send('Formulario actualizado');
-      }
+      res.status(200).send('Formulario actualizado');
     }
   });
-};
+  
+}
 
 const deleteForm = (req, res) => {
   const formId = req.params.id;
